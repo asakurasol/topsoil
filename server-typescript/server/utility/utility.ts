@@ -102,6 +102,15 @@ utility.identity = function(data){
         return '';
     }
     return data;
-}
+};
+
+utility.logIdentity = function(data){
+    if(!data){
+        console.log('no data passed');
+        return '';
+    }
+    console.log(data);
+    return data;
+};
 
 module.exports = utility;
