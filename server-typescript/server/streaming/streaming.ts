@@ -17,14 +17,14 @@ var createOutStream = function(socket, id : string){
 var createInStream = function(socket, id : string){
   var stream = through(function(chunk, enc, cb){
     cb(null, String(chunk));
-  })
+  });
   socket.on(id, function(data){
     if(!data.end){
       stream.write(data.payload);
     }else{
       stream.end();
     }
-  })
+  });
   return stream;
 };
 
@@ -42,19 +42,21 @@ var createBufferToStringStream = function(){
   })
 };
 
-var createSpawnStream = function(command, args, options){
+var createSpawnStream = function(command, args, options, parser){
   options = options || {};
   options.stdio = ['pipe', 'pipe'];
 
   return through(function(chunk, enc, cb){
+    console.log('the through function is being called');
     var stream = spawn(command, args, options);
     stream.stdin.write(String(chunk));
     stream.stdin.end();
     stream.stdout.on('data', function(d){
-      cb(null, String(d));
+      console.log(String(d));
+      cb(null, parser(String(d)));
     })
   });
-}
+};
 
 exports.createOutStream = createOutStream;
 exports.createInStream = createInStream;
