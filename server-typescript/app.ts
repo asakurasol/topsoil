@@ -66,13 +66,15 @@ function setupAPI(api, socket){
       })
     })
 }
-io.on('connection', function(socket){
-  console.log("a user is connected");
 
-  var api = processManager();
+io.on('connection', function(socket) {
+    console.log("a user is connected");
 
-  setupAPI(api, socket);
-});
+    var api = processManager();
+
+
+    setupAPI(api, socket);
+})
 
 stateRoutes(server);
 
