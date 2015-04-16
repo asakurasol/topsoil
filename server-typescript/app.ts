@@ -29,10 +29,11 @@ io.on('connection', function(socket){
           for(var methodName in api[namespace]){
             ((socket, methodName, namespace) => {
               socket.on(namespace + '.' + methodName, function(opts){
+                  console.log('on name space ' + namespace + ' with method name ' + methodName + ' received ', opts);
                 var d = domain.create();
                 d.on('error', function(err){
                   console.log('error while making chain', err);
-                })
+                });
                 d.run(function(){
                   var inStream = createInSocketStream(socket, opts._uid);
                   var outStream = createOutSocketStream(socket, opts._uid);
@@ -50,7 +51,7 @@ io.on('connection', function(socket){
         var d = domain.create();
         d.on('error', function(err){
           console.log('error while making chain', err);
-        })
+        });
         d.run(function(){
           var inStream = createInSocketStream(socket, opts._uid);
           var outStream = createOutSocketStream(socket, opts._uid);
