@@ -42,19 +42,40 @@ var createBufferToStringStream = function(){
   })
 };
 
-var createSpawnStream = function(command, args, options, parser){
+var createSpawnStream = function(command, args, options){
   options = options || {};
   options.stdio = ['pipe', 'pipe'];
 
   return through(function(chunk, enc, cb){
-    console.log('the through function is being called');
     var stream = spawn(command, args, options);
     stream.stdin.write(String(chunk));
     stream.stdin.end();
     stream.stdout.on('data', function(d){
-      console.log(String(d));
-      cb(null, parser(String(d)));
+      cb(null, String(d));
     })
+  });
+};
+
+var createSpawnEndStream = function(command, args, options, parser){
+  options = options || {};
+  options.stdio = ['pipe', 'pipe'];
+
+  return through(function(chunk, enc, cb){
+    console.log('the through function is being called with options', options);
+    var stream = spawn(command, args, options);
+    var data = '';
+    stream.stdin.write(String(chunk));
+    stream.stdin.end();
+    stream.stdout.on('data', function(d){
+      data+=d;
+    });
+    stream.stdout.on('end', function(){
+      if(data === ''){
+        data = 'message received';
+      }
+      console.log('stream ended', data);
+      cb(null, parser(String(data)));
+    });
   });
 };
 
@@ -63,3 +84,4 @@ exports.createInStream = createInStream;
 exports.createGenericStream = createGenericStream;
 exports.createBufferToStringStream = createBufferToStringStream;
 exports.createSpawnStream = createSpawnStream;
+exports.createSpawnEndStream = createSpawnEndStream;
