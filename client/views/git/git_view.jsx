@@ -42,9 +42,14 @@ var GitComponent = React.createClass({
               return <GitUntracked fileName = {file}/>
             });
     }
+        // <span>
+        //   <GitBranches/>
+        // </span>
 
     return (<row>
-       <h2>Git View (branch: {this.state.status.branch})</h2>
+       <h2><i className = 'github icon'/>
+        Git View (branch: {this.state.status.branch})
+       </h2>
        <GitButton fileName = '.' action='add' label='Add All' color="green" icon="plus"/>
        <GitButton fileName = '.' action='reset' label='Reset All' color="red" icon="minus"/>
        <GitCommit/>
@@ -159,6 +164,7 @@ var GitDiff = React.createClass({
 
 var GitButton = React.createClass({
   handleAddClick: function(e){
+    e.preventDefault();
     if(this.props.action ==='difference'){
       this.props.handleDiff(this);
       return;
@@ -174,7 +180,9 @@ var GitButton = React.createClass({
     }
     return (
       <button className = {"medium ui button animated " + this.props.color} onClick={this.handleAddClick}>
-        <div className = "visible content">{this.props.label}</div>
+        <div className = "visible content">
+          {this.props.label}
+        </div>
         <div className = "hidden content">
           <i className = {this.props.icon + " icon"}></i>
         </div>
@@ -202,6 +210,29 @@ var GitCommit = React.createClass({
         <GitButton onClick = {this.reset} fileName = {this.state} action='commit' label='Commit' color="orange" icon="write"/>
       </span>
     )
+  }
+})
+
+var GitBranches = React.createClass({
+  getInitialState: function(){
+    return {branch: ['one', 'two', 'three']};
+  },
+  render: function(){
+    return (
+    <div className="ui dropdown">
+      <div className="text">Shop</div>
+      <i className="dropdown icon"></i>
+      <div className="menu">
+        <div className="header">Categories</div>
+        <div className="item">Clothing</div>
+        <div className="item">Home Goods</div>
+        <div className="item">Bedroom</div>
+        <div className="divider"></div>
+        <div className="header">Order</div>
+        <div className="item">Status</div>
+        <div className="item">Cancellations</div>
+      </div>
+    </div>)
   }
 })
 
