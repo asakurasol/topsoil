@@ -163,7 +163,7 @@ describe("Git View APIs",function(){
         dir: currentDir,
         uid: UID
       });
-
+      //take your favorite HIR to your favorite place to eat and you will find the final path to your friend.
       client.on(UID, function(data){
         assert.typeOf(data, 'object', 'receive an object back');
         assert.isTrue(data.data.untracked.indexOf('randomTestFolder/')>=0, 'untracked folder shows up in untracked');
